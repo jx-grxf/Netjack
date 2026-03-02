@@ -1,5 +1,14 @@
 # Netjack
 
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-4-010101?logo=socket.io&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38BDF8?logo=tailwindcss&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Netjack is a real-time multiplayer Blackjack game for local networks, built with a TypeScript monorepo (`client` + `server`) and Socket.IO.
 
 ## Highlights
