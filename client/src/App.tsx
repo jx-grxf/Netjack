@@ -570,7 +570,7 @@ export default function App() {
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 sm:px-5">
           <div className="flex items-center gap-2">
             <div className="h-2.5 w-2.5 rounded-full bg-accent-cyan" />
-            <p className="text-sm font-semibold tracking-wide text-slate-100">LAN Blackjack</p>
+            <p className="text-sm font-semibold tracking-wide text-slate-100">Netjack</p>
           </div>
           <div className="relative flex items-center gap-2">
             <ConnectionPill status={connectionStatus} />

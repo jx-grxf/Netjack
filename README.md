@@ -1,6 +1,6 @@
-# LAN Blackjack
+# Netjack
 
-A real-time multiplayer Blackjack game for local networks, built with a TypeScript monorepo (`client` + `server`) and Socket.IO.
+Netjack is a real-time multiplayer Blackjack game for local networks, built with a TypeScript monorepo (`client` + `server`) and Socket.IO.
 
 ## Highlights
 
@@ -110,7 +110,7 @@ npm run start -w server
 ## Project Structure
 
 ```text
-Blackjack/
+Netjack/
 ├── client/
 ├── server/
 ├── .github/workflows/ci.yml

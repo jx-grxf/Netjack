@@ -98,7 +98,7 @@ app.get('/admin/stats', (req, res) => {
 
   const auth = parseBasicAuthHeader(req.headers.authorization);
   if (!auth || auth.username !== ADMIN_USER || auth.password !== ADMIN_PASS) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="LAN Blackjack Admin"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Netjack Admin"');
     res.status(401).json({ message: 'Unauthorized' });
     return;
   }
