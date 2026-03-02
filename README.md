@@ -1,4 +1,8 @@
-# Netjack
+<div align="center">
+
+# 🃏 Netjack
+
+**Real-time multiplayer Blackjack for local networks**
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
@@ -9,68 +13,92 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38BDF8?logo=tailwindcss&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+</div>
+
 Netjack is a real-time multiplayer Blackjack game for local networks, built with a TypeScript monorepo (`client` + `server`) and Socket.IO.
 
-## Highlights
+---
 
-- Host-and-join lobby flow with 6-character lobby codes
-- Server-authoritative Blackjack rules and turn validation
-- Split and double-down support
-- Round stats and event log
-- Realtime lobby chat
-- Optional admin stats endpoint (disabled by default)
+## ✨ Highlights
 
-## Tech Stack
+| | Feature |
+|---|---|
+| 🏠 | Host-and-join lobby flow with 6-character lobby codes |
+| 🛡️ | Server-authoritative Blackjack rules and turn validation |
+| ✂️ | Split and double-down support |
+| 📊 | Round stats and event log |
+| 💬 | Realtime lobby chat |
+| 🔒 | Optional admin stats endpoint (disabled by default) |
 
-- `server/`: Node.js, Express, Socket.IO, TypeScript, Vitest
-- `client/`: React, Vite, TypeScript, Tailwind CSS
-- Root: npm workspaces for unified scripts
+---
 
-## Requirements
+## 🛠️ Tech Stack
 
-- Node.js `20.x` (see [.nvmrc](.nvmrc))
-- npm `9+`
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 18, Vite 5, TypeScript, Tailwind CSS |
+| **Backend** | Node.js 20, Express 4, Socket.IO 4, TypeScript, Vitest |
+| **Monorepo** | npm workspaces |
 
-## Quick Start
+---
+
+## 📋 Requirements
+
+- **Node.js** `20.x` — see [.nvmrc](.nvmrc)
+- **npm** `9+`
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-npm ci
-npm run dev
+npm ci        # install all workspace dependencies
+npm run dev   # start client + server in watch mode
 ```
 
-Default local URLs:
-- Client: `http://localhost:5173`
-- Server: `http://localhost:3001`
+| Service | URL |
+|---|---|
+| Client | http://localhost:5173 |
+| Server | http://localhost:3001 |
 
-## Configuration
+---
 
-This repo includes safe templates:
-- [.env.server.example](.env.server.example)
-- [.env.client.example](.env.client.example)
+## ⚙️ Configuration
 
-Recommended setup:
+Safe environment templates are included in the repo:
 
-1. Copy server template values into your shell env or local server env file.
+| Template | Purpose |
+|---|---|
+| [.env.server.example](.env.server.example) | Server environment variables |
+| [.env.client.example](.env.client.example) | Client environment variables |
+
+**Recommended setup:**
+
+1. Copy server template values into your shell env or a local server env file.
 2. Copy client template values into `client/.env.local`.
 3. Keep secrets out of git.
 
-### Important Security Defaults
+### 🔐 Security Defaults
 
-- Admin endpoint (`/admin/stats`) is **off** unless `ADMIN_ENABLED=true`.
-- No default admin credentials are baked into server runtime.
-- CORS is restricted to `CLIENT_URLS` allowlist (comma-separated origins).
+> - Admin endpoint (`/admin/stats`) is **off** unless `ADMIN_ENABLED=true`.
+> - No default admin credentials are baked into server runtime.
+> - CORS is restricted to the `CLIENT_URLS` allowlist (comma-separated origins).
 
-## Scripts
+---
 
-From repository root:
+## 📜 Scripts
 
-- `npm run dev`: run client + server in watch mode
-- `npm run check`: workspace type checks (when available)
-- `npm run test`: workspace tests
-- `npm run build`: workspace production builds
-- `npm run ci`: check + test + build
+Run from the repository root:
 
-Workspace-specific examples:
+| Command | Description |
+|---|---|
+| `npm run dev` | Start client + server in watch mode |
+| `npm run check` | Workspace type checks |
+| `npm run test` | Run all workspace tests |
+| `npm run build` | Production builds for all packages |
+| `npm run ci` | check + test + build |
+
+**Workspace-specific:**
 
 ```bash
 npm run dev -w server
@@ -79,15 +107,16 @@ npm run test -w server
 npm run check -w client
 ```
 
-## LAN Usage
+---
 
-1. Start with `npm run dev`.
+## 🌐 LAN Usage
+
+1. Start the app with `npm run dev`.
 2. Open the client on the host machine.
-3. On other devices in the same network, open:
-   - `http://<host-ip>:5173`
-4. Create or join a lobby with the 6-character code.
+3. Other devices on the same network can connect at `http://<host-ip>:5173`.
+4. Create or join a lobby using the 6-character code.
 
-Find host IP:
+**Find your host IP:**
 
 ```bash
 # macOS
@@ -100,36 +129,44 @@ hostname -I
 ipconfig
 ```
 
-## Production Notes
+---
 
-- Build all packages:
+## 📦 Production Notes
+
+**Build all packages:**
 
 ```bash
 npm run build
 ```
 
-- Start backend from built output:
+**Start backend from built output:**
 
 ```bash
 npm run start -w server
 ```
 
-- Serve the `client/dist` output with your preferred static host.
+Serve the `client/dist` output with your preferred static host.
 
-## Project Structure
+---
+
+## 🗂️ Project Structure
 
 ```text
 Netjack/
-├── client/
-├── server/
-├── .github/workflows/ci.yml
+├── client/               # React + Vite frontend
+├── server/               # Node.js + Express + Socket.IO backend
+├── .github/workflows/    # CI pipeline
 └── README.md
 ```
 
-## Contributing
+---
+
+## 🤝 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md).
 
-## License
+---
+
+## 📄 License
 
 [MIT](LICENSE)
