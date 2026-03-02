@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: "Inter", "Avenir Next", system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply m-0 min-h-screen text-slate-100 antialiased;
+    background-color: #080f0b;
+    background-image:
+      radial-gradient(70rem 35rem at 20% -10%, rgba(16, 185, 129, 0.14), transparent),
+      radial-gradient(56rem 30rem at 80% 110%, rgba(245, 158, 11, 0.1), transparent),
+      radial-gradient(ellipse at top, #0d2818 0%, #080f0b 60%);
+  }
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl border border-white/10 bg-black/35 shadow-glow backdrop-blur-xl;
+  }
+
+  .glass-dark {
+    @apply rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl;
+  }
+
+  .title-gradient {
+    @apply bg-gradient-to-b from-white to-white/55 bg-clip-text text-transparent;
+  }
+
+  .subtle-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  }
+
+  .subtle-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .subtle-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .subtle-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+  }
+
+  .table-felt {
+    background: radial-gradient(ellipse at center, #1a5c37 0%, #0d4a2c 50%, #0a3520 100%);
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.52), inset 0 0 120px rgba(0, 0, 0, 0.35);
+  }
+
+  .player-glow {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.35), 0 0 60px rgba(245, 158, 11, 0.15);
+  }
+}
