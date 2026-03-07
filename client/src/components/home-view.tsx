@@ -26,6 +26,19 @@ export function HomeView({
   onJoin,
 }: HomeViewProps) {
   const isConnected = connectionStatus === "connected";
+  const isConnecting = connectionStatus === "connecting";
+  const lobbyCodeInput = lobbyCode.replace(/[^a-z0-9]/gi, "").toUpperCase().slice(0, 6);
+  const hasValidLobbyCode = /^[A-Z0-9]{6}$/.test(lobbyCodeInput);
+  const connectionLabel = isConnected
+    ? "Connected to server"
+    : isConnecting
+      ? "Connecting to server"
+      : "Disconnected from server";
+  const connectionClasses = isConnected
+    ? "border-emerald-500/35 bg-emerald-900/30 text-emerald-300"
+    : isConnecting
+      ? "border-amber-500/35 bg-amber-900/25 text-amber-300"
+      : "border-red-500/35 bg-red-900/25 text-red-300";
 
   return (
     <main className="min-h-[calc(100vh-56px)]">
@@ -46,13 +59,9 @@ export function HomeView({
               Create a private table or join with a 6-character code.
             </p>
             <div
-              className={`mt-4 rounded-full border px-3 py-1.5 text-xs ${
-                isConnected
-                  ? "border-emerald-500/35 bg-emerald-900/30 text-emerald-300"
-                  : "border-red-500/35 bg-red-900/25 text-red-300"
-              }`}
+              className={`mt-4 rounded-full border px-3 py-1.5 text-xs ${connectionClasses}`}
             >
-              {isConnected ? "Connected to server" : "Connecting to server"}
+              {connectionLabel}
             </div>
           </div>
 
@@ -92,8 +101,8 @@ export function HomeView({
               <label className="space-y-1.5">
                 <span className="text-xs font-medium uppercase tracking-wider text-slate-300">Lobby Code</span>
                 <Input
-                  value={lobbyCode}
-                  onChange={(event) => onLobbyCodeChange(event.target.value.toUpperCase())}
+                  value={lobbyCodeInput}
+                  onChange={(event) => onLobbyCodeChange(event.target.value.replace(/[^a-z0-9]/gi, "").toUpperCase().slice(0, 6))}
                   maxLength={6}
                   placeholder="ABC123"
                 />
@@ -102,7 +111,7 @@ export function HomeView({
                 variant="ghost"
                 className="mt-4 w-full"
                 onClick={onJoin}
-                disabled={!isConnected || loading || !playerName.trim() || lobbyCode.trim().length !== 6}
+                disabled={!isConnected || loading || !playerName.trim() || !hasValidLobbyCode}
               >
                 Join Lobby
               </Button>

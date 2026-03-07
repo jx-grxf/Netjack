@@ -379,6 +379,7 @@ export default function App() {
     }
     return "home";
   }, [game, lobby]);
+  const isConnected = connectionStatus === "connected";
 
   const validateName = () => {
     const value = playerName.trim();
@@ -523,6 +524,7 @@ export default function App() {
             <LobbyView
               lobby={lobby}
               selfId={selfId}
+              isConnected={isConnected}
               loading={loading}
               onToggleReady={(ready) => emitOrNotify("lobby:ready", { ready })}
               onSetBet={(amount) => emitOrNotify("game:setBet", { amount })}
@@ -537,6 +539,7 @@ export default function App() {
               table={game}
               selfId={selfId}
               hostId={lobby?.hostId ?? ""}
+              isConnected={isConnected}
               onHit={() => emitOrNotify("game:hit")}
               onStand={() => emitOrNotify("game:stand")}
               onDouble={() => emitOrNotify("game:double")}

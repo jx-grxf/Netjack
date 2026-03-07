@@ -183,6 +183,9 @@ export class LobbyService {
     const player = this.requirePlayer(lobby, playerId);
 
     player.connected = connected;
+    if (!connected) {
+      player.ready = false;
+    }
     this.store.set(lobby);
     return lobby;
   }
@@ -191,6 +194,12 @@ export class LobbyService {
     const lobby = this.requireLobby(code);
     const player = this.requirePlayer(lobby, playerId);
 
+    if (player.isBot) {
+      throw new Error('Bots are always ready');
+    }
+    if (!player.connected) {
+      throw new Error('Disconnected players cannot change readiness');
+    }
     if (lobby.gameState.phase !== 'waiting') {
       throw new Error('Cannot change readiness during a round');
     }
@@ -885,6 +894,7 @@ export class LobbyService {
   private canDouble(player: PlayerState, hand: PlayerHandState, roundIsActive: boolean): boolean {
     return (
       roundIsActive &&
+      hand.bet > 0 &&
       hand.cards.length === 2 &&
       !hand.standing &&
       !hand.busted &&
@@ -895,6 +905,7 @@ export class LobbyService {
 
   private canSplit(player: PlayerState, hand: PlayerHandState, roundIsActive: boolean): boolean {
     if (!roundIsActive) return false;
+    if (hand.bet <= 0) return false;
     if (player.hands.length !== 1) return false;
     if (hand.cards.length !== 2) return false;
     if (hand.standing || hand.busted) return false;

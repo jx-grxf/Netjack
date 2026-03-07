@@ -443,4 +443,60 @@ describe('LobbyService betting and actions', () => {
     expect(() => service.doubleDown(lobby.code, host.id)).toThrowError('Natural blackjack resolves automatically');
     expect(() => service.split(lobby.code, host.id)).toThrowError('Natural blackjack resolves automatically');
   });
+
+  it('clears ready status when a player disconnects', () => {
+    const service = new LobbyService(new LobbyStore(), { maxPlayers: 2 });
+    const lobby = service.createLobby('host-13', 'Ria');
+    service.joinLobby(lobby.code, 'guest-13', 'Sven');
+    service.setReady(lobby.code, 'guest-13', true);
+
+    const updated = service.markConnected(lobby.code, 'guest-13', false);
+    const guest = updated.players.find((player) => player.id === 'guest-13');
+
+    expect(guest?.connected).toBe(false);
+    expect(guest?.ready).toBe(false);
+  });
+
+  it('rejects readiness updates for disconnected players', () => {
+    const service = new LobbyService(new LobbyStore(), { maxPlayers: 2 });
+    const lobby = service.createLobby('host-14', 'Tia');
+    service.joinLobby(lobby.code, 'guest-14', 'Uma');
+    service.markConnected(lobby.code, 'guest-14', false);
+
+    expect(() => service.setReady(lobby.code, 'guest-14', true)).toThrowError(
+      'Disconnected players cannot change readiness'
+    );
+  });
+
+  it('rejects double down and split on invalid zero-bet hand state', () => {
+    const service = new LobbyService(new LobbyStore(), { maxPlayers: 2 });
+    const lobby = service.createBotGame('host-15', 'Vik');
+    const host = lobby.players.find((player) => player.id === 'host-15');
+
+    if (!host) throw new Error('Expected host player');
+
+    host.hands = [
+      {
+        cards: [
+          { rank: '8', suit: 'S' },
+          { rank: '8', suit: 'H' }
+        ],
+        bet: 0,
+        standing: false,
+        busted: false,
+        doubled: false,
+        fromSplit: false
+      }
+    ];
+    host.activeHandIndex = 0;
+
+    lobby.gameState.currentTurnPlayerId = host.id;
+    lobby.gameState.currentTurnHandIndex = 0;
+    lobby.gameState.phase = 'in_round';
+
+    expect(() => service.doubleDown(lobby.code, host.id)).toThrowError(
+      'Double down is not allowed right now'
+    );
+    expect(() => service.split(lobby.code, host.id)).toThrowError('Split is not allowed right now');
+  });
 });
