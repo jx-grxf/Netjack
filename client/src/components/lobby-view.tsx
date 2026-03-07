@@ -10,6 +10,7 @@ const MAX_BET = 500;
 interface LobbyViewProps {
   lobby: LobbyState;
   selfId: string;
+  isConnected: boolean;
   loading: boolean;
   onToggleReady: (ready: boolean) => void;
   onSetBet: (amount: number) => void;
@@ -17,7 +18,7 @@ interface LobbyViewProps {
   onLeave: () => void;
 }
 
-export function LobbyView({ lobby, selfId, loading, onToggleReady, onSetBet, onStartGame, onLeave }: LobbyViewProps) {
+export function LobbyView({ lobby, selfId, isConnected, loading, onToggleReady, onSetBet, onStartGame, onLeave }: LobbyViewProps) {
   const players = Array.isArray(lobby.players) ? lobby.players : [];
   const me = players.find((player) => player.id === selfId);
   const isHost = lobby.hostId === selfId;
@@ -26,7 +27,8 @@ export function LobbyView({ lobby, selfId, loading, onToggleReady, onSetBet, onS
   const allRequiredBetsValid = playersWhoMustBet.every(
     (player) => Number.isInteger(player.bet) && player.bet >= MIN_BET && player.bet <= MAX_BET && player.bet <= player.chips,
   );
-  const canStart = isHost && readyPlayers.length > 1 && readyPlayers.every((player) => player.ready) && allRequiredBetsValid;
+  const canStart =
+    isConnected && isHost && readyPlayers.length > 1 && readyPlayers.every((player) => player.ready) && allRequiredBetsValid;
   const readyCount = players.filter((player) => player.ready).length;
   const [betInput, setBetInput] = useState(String(me?.bet ?? MIN_BET));
 
@@ -63,7 +65,11 @@ export function LobbyView({ lobby, selfId, loading, onToggleReady, onSetBet, onS
               {readyCount} ready
             </p>
           </div>
-          <Button variant={me?.ready ? "ghost" : "success"} onClick={() => onToggleReady(!Boolean(me?.ready))}>
+          <Button
+            variant={me?.ready ? "ghost" : "success"}
+            onClick={() => onToggleReady(!Boolean(me?.ready))}
+            disabled={!isConnected}
+          >
             {me?.ready ? "Unready" : "Ready"}
           </Button>
           {isHost ? (
@@ -121,7 +127,7 @@ export function LobbyView({ lobby, selfId, loading, onToggleReady, onSetBet, onS
             <Button
               variant="ghost"
               onClick={applyBet}
-              disabled={me.chips < MIN_BET}
+              disabled={!isConnected || me.chips < MIN_BET}
             >
               Set Bet
             </Button>
@@ -134,6 +140,11 @@ export function LobbyView({ lobby, selfId, loading, onToggleReady, onSetBet, onS
 
       <div className="mt-4 rounded-xl border border-white/10 bg-black/25 px-4 py-3">
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/45">How To Play</h3>
+        {!isConnected ? (
+          <p className="mb-2 rounded-md border border-red-500/35 bg-red-900/25 px-2 py-1 text-xs text-red-300">
+            You are offline. Reconnect to change ready state, bets, or start the game.
+          </p>
+        ) : null}
         <ul className="space-y-1 text-xs text-white/50">
           <li>All players ready up, then host starts the round.</li>
           <li>Hit or stand to get close to 21 without busting.</li>

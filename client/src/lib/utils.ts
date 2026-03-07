@@ -7,6 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatTime(isoOrEpoch: string | number) {
   const date = typeof isoOrEpoch === "number" ? new Date(isoOrEpoch) : new Date(isoOrEpoch);
+  if (Number.isNaN(date.getTime())) {
+    return "--:--";
+  }
   return date.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",

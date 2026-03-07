@@ -14,6 +14,7 @@ interface GameTableViewProps {
   players: PlayerState[];
   selfId: string;
   hostId: string;
+  isConnected: boolean;
   onHit: () => void;
   onStand: () => void;
   onDouble: () => void;
@@ -55,6 +56,7 @@ export function GameTableView({
   players,
   selfId,
   hostId,
+  isConnected,
   onHit,
   onStand,
   onDouble,
@@ -81,9 +83,10 @@ export function GameTableView({
     !myActiveHand?.busted &&
     !myActiveHand?.standing &&
     !hasNaturalBlackjack;
-  const canDouble = canAct && (myActiveHand?.cards.length ?? 0) === 2 && (me?.chips ?? 0) >= (myActiveHand?.bet ?? 0);
+  const canActOnline = isConnected && canAct;
+  const canDouble = canActOnline && (myActiveHand?.cards.length ?? 0) === 2 && (me?.chips ?? 0) >= (myActiveHand?.bet ?? 0);
   const canSplit =
-    canAct &&
+    canActOnline &&
     myHands.length === 1 &&
     (myActiveHand?.cards.length ?? 0) === 2 &&
     (me?.chips ?? 0) >= (myActiveHand?.bet ?? 0) &&
@@ -134,7 +137,7 @@ export function GameTableView({
         </div>
         <div className="flex items-center gap-2">
           {isHost && roundFinished ? (
-            <Button variant="primary" onClick={onNextRound} disabled={!allRequiredBetsValid}>
+            <Button variant="primary" onClick={onNextRound} disabled={!isConnected || !allRequiredBetsValid}>
               Next Round
             </Button>
           ) : null}
@@ -240,10 +243,10 @@ export function GameTableView({
       </div>
 
       <div className="flex flex-wrap items-center gap-2 border-t border-white/10 bg-black/30 px-4 py-3">
-        <Button variant="success" onClick={onHit} disabled={!canAct}>
+        <Button variant="success" onClick={onHit} disabled={!canActOnline}>
           Hit
         </Button>
-        <Button variant="ghost" onClick={onStand} disabled={!canAct}>
+        <Button variant="ghost" onClick={onStand} disabled={!canActOnline}>
           Stand
         </Button>
         <Button variant="ghost" onClick={onDouble} disabled={!canDouble}>
@@ -252,9 +255,10 @@ export function GameTableView({
         <Button variant="ghost" onClick={onSplit} disabled={!canSplit}>
           Split
         </Button>
-        {!roundFinished && isTurn ? (
+        {!roundFinished && isTurn && isConnected ? (
           <p className="self-center text-xs text-slate-300">Your turn{typeof table.currentTurnHandIndex === "number" ? ` (Hand ${table.currentTurnHandIndex + 1})` : ""}</p>
         ) : null}
+        {!isConnected ? <p className="self-center text-xs text-red-300">Offline: actions paused until reconnected</p> : null}
         {!isTurn && !roundFinished ? <p className="self-center text-xs text-slate-400">Waiting for other player</p> : null}
         {table.phase === "round_over" ? <p className="self-center text-xs text-slate-300">Round complete</p> : null}
       </div>
@@ -296,7 +300,7 @@ export function GameTableView({
                   onChange={(event) => setBetInput(event.target.value)}
                   className="w-full sm:w-40"
                 />
-                <Button variant="ghost" onClick={applyBet} disabled={me.chips < MIN_BET}>
+                <Button variant="ghost" onClick={applyBet} disabled={!isConnected || me.chips < MIN_BET}>
                   Set Next Bet
                 </Button>
                 <p className="text-xs text-white/55 sm:col-span-2 xl:max-w-[24rem]">
